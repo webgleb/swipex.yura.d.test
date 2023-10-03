@@ -27,8 +27,14 @@ const jsonData = [
     "type": "number",
     "min_value": 12,
     "max_value": 100,
-    "value": "",
+    "default_value": 0,
     "placeholder": "Enter the age limit for the game"
+  },
+  {
+    "name": "boolean",
+    "type": "boolean",
+    "default_value": false,
+    "placeholder": "Select true or false"
   }
 ];
 
@@ -106,17 +112,25 @@ function App() {
                 ))}
               </select>
             )}
-            {fieldData.type === 'number' && (
+           {fieldData.type === 'number' && (
               <input
                 type="number"
                 name={fieldData.name}
                 onChange={(e) => handleChange(fieldData.name, e.target.value)}
-                value={formData[fieldData.name] || ''}
+                value={formData[fieldData.name]} 
                 placeholder={fieldData.placeholder}
                 min={fieldData.min_value}
                 max={fieldData.max_value}
               />
-            )}  
+            )}
+            {fieldData.type === 'boolean' && (
+              <input
+                type="checkbox"
+                name={fieldData.name}
+                onChange={(e) => handleChange(fieldData.name, e.target.checked)}
+                checked={formData[fieldData.name] || false}
+              />
+            )}
           </div>
         ))}
         <div className="button-container">
