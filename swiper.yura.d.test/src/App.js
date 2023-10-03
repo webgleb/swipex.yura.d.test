@@ -3,27 +3,27 @@ import './App.css';
 
 const jsonData = [
   {
-    "name": "name",
+    "name": "text",
     "type": "text",
     "validation": "^[A-Za-z]+$",
     "value": "",
     "placeholder": "Enter name game"
   },
   {
-    "name": "description",
+    "name": "longtext",
     "type": "longtext",
     "value": "",
     "placeholder": "Enter a description of game"
   },
   {
-    "name": "type",
+    "name": "dropdown",
     "type": "dropdown",
     "options": ["Shooter", "Racing", "PRG", "Strategy", "Adventure"],
     "value": "",
     "placeholder": "Select type of game"
   },
   {
-    "name": "age",
+    "name": "number",
     "type": "number",
     "min_value": 12,
     "max_value": 100,
@@ -40,7 +40,7 @@ function App() {
     const fieldData = jsonData.find((field) => field.name === name);
   
     if (fieldData) {
-      if (fieldData.type === 'text' || fieldData.type === 'longtext') {
+      if (fieldData.type === 'text') {
         if (fieldData.validation && !new RegExp(fieldData.validation).test(value)) {
           alert(`Invalid ${name}! Please follow the validation rules.`);
           return;
@@ -49,14 +49,13 @@ function App() {
   
       if (fieldData.type === 'number') {
         const numValue = parseFloat(value);
-        if (
-          (fieldData.min_value !== undefined && numValue < fieldData.min_value) ||
-          (fieldData.max_value !== undefined && numValue > fieldData.max_value)
-        ) {
-          alert(`Invalid ${name}! Please enter a valid number within the specified range.`);
-          return;
-        }
+        setFormData({
+          ...formData,
+          [name]: numValue,
+        });
+        return;
       }
+      
     }
   
     setFormData({
