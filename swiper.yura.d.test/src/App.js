@@ -44,11 +44,11 @@ function App() {
   jsonData.forEach((fieldData) => {
     if (fieldData.type === 'number') {
       initialFormData[fieldData.id] = fieldData.default_value || 12;
-    } else if (fieldData.type === 'boolean') {
+    }  
+    if (fieldData.type === 'boolean') {
       initialFormData[fieldData.id] = fieldData.default_value || false;
-    } else {
-      initialFormData[fieldData.id] = '';
-    }
+    } 
+    initialFormData[fieldData.id] = '';
   });
 
   const [formData, setFormData] = useState(initialFormData);
@@ -61,7 +61,6 @@ function App() {
       if (fieldData.type === 'text') {
         if (fieldData.validation && !new RegExp(fieldData.validation).test(value)) {
           alert(`Invalid ${fieldData.id}! Please follow the validation rules.`);
-          return;
         }
       }
   
@@ -71,7 +70,6 @@ function App() {
           ...formData,
           [id]: numValue,
         });
-        return;
       }
     }
   
