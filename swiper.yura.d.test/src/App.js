@@ -44,11 +44,9 @@ function App() {
   jsonData.forEach((fieldData) => {
     if (fieldData.type === 'number') {
       initialFormData[fieldData.id] = fieldData.default_value || 12;
-    }  
-    if (fieldData.type === 'boolean') {
+    } else if (fieldData.type === 'boolean') {
       initialFormData[fieldData.id] = fieldData.default_value || false;
-    } 
-    initialFormData[fieldData.id] = '';
+    } else initialFormData[fieldData.id] = '';
   });
 
   const [formData, setFormData] = useState(initialFormData);
@@ -57,28 +55,20 @@ function App() {
   const handleChange = (id, value) => {
     const fieldData = jsonData.find((field) => field.id === id);
   
-    if (fieldData) {
-      if (fieldData.type === 'text') {
-        if (fieldData.validation && !new RegExp(fieldData.validation).test(value)) {
-          alert(`Invalid ${fieldData.id}! Please follow the validation rules.`);
-        }
-      }
+    if (!fieldData) {
+      return;
+    }
   
-      if (fieldData.type === 'number') {
-        const numValue = parseFloat(value);
-        setFormData({
-          ...formData,
-          [id]: numValue,
-        });
-      }
+    if (fieldData.type === 'text' && fieldData.validation && !new RegExp(fieldData.validation).test(value)) {
+      alert(`Invalid ${fieldData.id}! Please follow the validation rules.`);
+      return;
     }
   
     setFormData({
       ...formData,
-      [id]: value,
+      [id]: fieldData.type === 'number' ? parseFloat(value) : value,
     });
   };
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
