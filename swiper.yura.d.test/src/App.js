@@ -3,6 +3,7 @@ import './App.css';
 
 const jsonData = [
   {
+    id: "text-type",
     "name": "text",
     "type": "text",
     "validation": "^[A-Za-z]+$",
@@ -10,28 +11,28 @@ const jsonData = [
     "placeholder": "Enter name game"
   },
   {
-    "name": "longtext",
+    id: "longtext-type",
     "type": "longtext",
     "value": "",
     "placeholder": "Enter a description of game"
   },
   {
-    "name": "dropdown",
+    id: "dropdown-type",
     "type": "dropdown",
     "options": ["Shooter", "Racing", "PRG", "Strategy", "Adventure"],
     "value": "",
     "placeholder": "Select type of game"
   },
   {
-    "name": "number",
+    id: "number-type",
     "type": "number",
     "min_value": 12,
     "max_value": 100,
-    "default_value": 0,
+    "default_value": 12,
     "placeholder": "Enter the age limit for the game"
   },
   {
-    "name": "boolean",
+    id: "boolean-type",
     "type": "boolean",
     "default_value": false,
     "placeholder": "Select true or false"
@@ -39,16 +40,27 @@ const jsonData = [
 ];
 
 function App() {
-  const [formData, setFormData] = useState({});
+  const initialFormData = {};
+  jsonData.forEach((fieldData) => {
+    if (fieldData.type === 'number') {
+      initialFormData[fieldData.id] = fieldData.default_value || 12;
+    } else if (fieldData.type === 'boolean') {
+      initialFormData[fieldData.id] = fieldData.default_value || false;
+    } else {
+      initialFormData[fieldData.id] = '';
+    }
+  });
+
+  const [formData, setFormData] = useState(initialFormData);
   const [formValues, setFormValues] = useState({});
 
-  const handleChange = (name, value) => {
-    const fieldData = jsonData.find((field) => field.name === name);
+  const handleChange = (id, value) => {
+    const fieldData = jsonData.find((field) => field.id === id);
   
     if (fieldData) {
       if (fieldData.type === 'text') {
         if (fieldData.validation && !new RegExp(fieldData.validation).test(value)) {
-          alert(`Invalid ${name}! Please follow the validation rules.`);
+          alert(`Invalid ${fieldData.id}! Please follow the validation rules.`);
           return;
         }
       }
@@ -57,18 +69,18 @@ function App() {
         const numValue = parseFloat(value);
         setFormData({
           ...formData,
-          [name]: numValue,
+          [id]: numValue,
         });
         return;
       }
-      
     }
   
     setFormData({
       ...formData,
-      [name]: value,
+      [id]: value,
     });
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,25 +96,25 @@ function App() {
             {fieldData.type === 'text' && (
               <input
                 type="text"
-                name={fieldData.name}
-                onChange={(e) => handleChange(fieldData.name, e.target.value)}
-                value={formData[fieldData.name] || ''}
+                name={fieldData.id}
+                onChange={(e) => handleChange(fieldData.id, e.target.value)}
+                value={formData[fieldData.id] || ''}
                 placeholder={fieldData.placeholder}
-              />
+             />
             )}
             {fieldData.type === 'longtext' && (
               <textarea
-                name={fieldData.name}
-                onChange={(e) => handleChange(fieldData.name, e.target.value)}
-                value={formData[fieldData.name] || ''}
+                name={fieldData.id}
+                onChange={(e) => handleChange(fieldData.id, e.target.value)}
+                value={formData[fieldData.id] || ''}
                 placeholder={fieldData.placeholder}
               />
             )} 
              {fieldData.type === 'dropdown' && (
               <select
-                name={fieldData.name}
-                onChange={(e) => handleChange(fieldData.name, e.target.value)}
-                value={formData[fieldData.name] || ''}
+                name={fieldData.id}
+                onChange={(e) => handleChange(fieldData.id, e.target.value)}
+                value={formData[fieldData.id] || ''}
               >
                 <option value="">{fieldData.placeholder}</option>
                 {fieldData.options.map((option, optionIndex) => (
@@ -115,9 +127,9 @@ function App() {
            {fieldData.type === 'number' && (
               <input
                 type="number"
-                name={fieldData.name}
-                onChange={(e) => handleChange(fieldData.name, e.target.value)}
-                value={formData[fieldData.name]} 
+                name={fieldData.id}
+                onChange={(e) => handleChange(fieldData.id, e.target.value)}
+                value={formData[fieldData.id]} 
                 placeholder={fieldData.placeholder}
                 min={fieldData.min_value}
                 max={fieldData.max_value}
@@ -126,9 +138,9 @@ function App() {
             {fieldData.type === 'boolean' && (
               <input
                 type="checkbox"
-                name={fieldData.name}
-                onChange={(e) => handleChange(fieldData.name, e.target.checked)}
-                checked={formData[fieldData.name] || false}
+                name={fieldData.id}
+                onChange={(e) => handleChange(fieldData.id, e.target.checked)}
+                checked={formData[fieldData.id]}
               />
             )}
           </div>
